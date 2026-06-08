@@ -17,47 +17,42 @@ EOS_TOKEN = "<EOS>"
 UNK_TOKEN = "<UNK>"
 
 SECTION_TOKENS = [
-    "[Intro]",
-    "[Verse 1]", "[Verse 2]", "[Verse 3]", "[Verse 4]", "[Verse 5]",
-    "[Pre-Chorus]",
-    "[Post-Chorus]",
-    "[Chorus]",
-    "[Hook]",
-    "[Refrain]",
-    "[Bridge]",
-    "[Outro]",
-    "[Interlude]",
-    "[Skit]",
-    "[End]",
+    "[Intro]", "[Verse 1]", "[Verse 2]", "[Verse 3]", "[Verse 4]", "[Verse 5]",
+    "[Pre-Chorus]", "[Post-Chorus]", "[Chorus]", "[Hook]", "[Refrain]",
+    "[Bridge]", "[Outro]", "[Interlude]", "[Skit]", "[End]",
 ]
-
 SPECIAL_TOKENS = [PAD_TOKEN, SOS_TOKEN, EOS_TOKEN, UNK_TOKEN] + SECTION_TOKENS
 PAD_IDX = 0
 SOS_IDX = 1
 EOS_IDX = 2
 UNK_IDX = 3
 
-TOKENIZER_TYPE = os.environ.get("ROAST_TOK", "bpe")
+TOKENIZER_TYPE = "bpe"
 BPE_VOCAB_SIZE = 4000
 TOKENIZER_PATH = os.path.join(CHECKPOINT_DIR, "tokenizer.json")
 TOKENIZER_META_PATH = os.path.join(CHECKPOINT_DIR, "tokenizer.meta.json")
 
 MAX_SEQ_LEN = 768
 
-D_MODEL = 256
+D_MODEL = 320
 N_HEADS = 8
-N_LAYERS = 6
-D_FF = 768
+N_KV_HEADS = 4
+N_LAYERS = 8
+D_FF = 896
 DROPOUT = 0.15
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
-BATCH_SIZE = 16
+ROPE_THETA = 10000.0
+RMS_NORM_EPS = 1e-6
+TIE_WEIGHTS = True
+
+BATCH_SIZE = 12
 LEARNING_RATE = 5e-4
-NUM_EPOCHS = 30
+NUM_EPOCHS = 35
 GRAD_CLIP = 1.0
-WARMUP_STEPS = 400
+WARMUP_STEPS = 200
 SAVE_EVERY = 5
-LOG_EVERY = 25
+LOG_EVERY = 100
 WEIGHT_DECAY = 0.01
 
 TEMPERATURE = 0.85

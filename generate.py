@@ -8,7 +8,7 @@ from config import (
     REPETITION_PENALTY, NO_REPEAT_NGRAM,
 )
 from tokenizer import load_tokenizer
-from model import LyricTransformer
+from model import RoastLyricModel
 
 
 def _strip_artist_brackets(text):
@@ -48,19 +48,23 @@ def load_model(checkpoint_path=None):
 
     d_model = checkpoint.get("d_model", 256)
     n_heads = checkpoint.get("n_heads", 8)
+    n_kv_heads = checkpoint.get("n_kv_heads", 4)
     n_layers = checkpoint.get("n_layers", 6)
     d_ff = checkpoint.get("d_ff", 512)
-    max_len = checkpoint.get("max_len", 768)
+    max_len = checkpoint.get("max_len", 1024)
+    tie_weights = checkpoint.get("tie_weights", True)
 
-    model = LyricTransformer(
+    model = RoastLyricModel(
         vocab_size=tokenizer.vocab_size,
-        d_model=d_model, n_heads=n_heads, n_layers=n_layers,
-        d_ff=d_ff, max_len=max_len,
+        d_model=d_model, n_heads=n_heads, n_kv_heads=n_kv_heads,
+        n_layers=n_layers, d_ff=d_ff, max_len=max_len,
+        tie_weights=tie_weights,
     ).to(DEVICE)
     model.load_state_dict(checkpoint["model_state_dict"])
     model.eval()
     n_params = sum(p.numel() for p in model.parameters())
-    print(f"[*] Model: {n_params:,} params, d_model={d_model}, n_layers={n_layers}")
+    print(f"[*] Model: {n_params:,} params, d_model={d_model}, n_layers={n_layers}, "
+          f"n_kv_heads={n_kv_heads}")
 
     return model, tokenizer, tok_type
 

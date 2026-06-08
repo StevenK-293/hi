@@ -217,7 +217,7 @@ class BPETokenizer:
 
 
 class LyricDataset:
-    def __init__(self, texts, tokenizer, seq_len=MAX_SEQ_LEN, stride=128):
+    def __init__(self, texts, tokenizer, seq_len=MAX_SEQ_LEN, stride=256):
         self.tokenizer = tokenizer
         self.seq_len = seq_len
         self.stride = stride
